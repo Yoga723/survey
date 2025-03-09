@@ -96,7 +96,17 @@ async function handleFormSubmit(event) {
   );
   const address = document.getElementById("address").value.trim();
 
-  // Validasi input sederhana
+  // Input tambahan
+  const category = document.getElementById("category").value;
+  const phone = document.getElementById("phone").value.trim();
+  const rating = document.getElementById("rating").value;
+  const attachmentInput = document.getElementById("attachment");
+  let attachmentName = "";
+  if (attachmentInput.files.length > 0) {
+    attachmentName = attachmentInput.files[0].name;
+  }
+
+  // Validasi input sederhana (sesuaikan jika diperlukan)
   if (!taskName) {
     alert("Nama tugas harus diisi.");
     return;
@@ -117,7 +127,7 @@ async function handleFormSubmit(event) {
   // Konversi tanggal lahir ke timestamp
   const birthDateTimestamp = new Date(birthDate).getTime();
 
-  // DARIMANA DAPAT id Custom Fieldnya ??? Caranya ada di bawah (setelah handleFormSubmit) ini.
+  // Mapping data ke custom fields ClickUp (ganti ID sesuai konfigurasi ClickUp Anda)
   const customFields = [
     { id: "8e9befe8-ae88-496f-b80b-fa87c83c2ea1", value: parseInt(age) }, // Umur
     { id: "5b0638e0-fdde-4f7d-b722-fe2500401c7f", value: birthDateTimestamp }, // Tanggal Lahir
@@ -125,10 +135,14 @@ async function handleFormSubmit(event) {
     { id: "custom_gender_field_id", value: gender }, // Gender
     { id: "custom_interests_field_id", value: interests }, // Minat/Interests
     { id: "custom_address_field_id", value: address }, // Alamat
+    { id: "custom_category_field_id", value: category }, // Kategori
+    { id: "custom_phone_field_id", value: phone }, // Telepon
+    { id: "custom_rating_field_id", value: rating }, // Rating
+    { id: "custom_attachment_field_id", value: attachmentName }, // Lampiran (nama file)
   ];
 
   try {
-    // 1. Cek apakah sudah ada task dengan nama yang sama di clickup
+    // 1. Cek apakah sudah ada task dengan nama yang sama di ClickUp
     const tasks = await getClickUpTasks(listId, apiToken);
     const matchingTasks = tasks.filter((task) => task.name === taskName);
 
